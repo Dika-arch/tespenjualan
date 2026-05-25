@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Mobile Banking UI</title>
+  <meta name="description" content="Tampilan mobile banking responsif untuk pengujian antarmuka di perangkat HP." />
+  <meta name="theme-color" content="#0072ce" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="BankUI" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <style>
+    :root {
+      --blue-900: #003f78;
+      --blue-800: #00589f;
+      --blue-700: #0072ce;
+      --blue-600: #0b85e8;
+      --blue-soft: #e8f5ff;
+      --orange: #ff8b1a;
+      --text: #1c2630;
+      --muted: #7b8794;
+      --line: #edf1f5;
+      --surface: #ffffff;
+      --bg: #f4f7fb;
+      --shadow: 0 12px 28px rgba(0, 42, 90, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .phone {
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      background: var(--bg);
+      position: relative;
+      overflow-x: hidden;
+      padding-bottom: calc(82px + env(safe-area-inset-bottom));
+      box-shadow: none;
+    }
+
+    .hero {
+      position: relative;
+      padding: calc(18px + env(safe-area-inset-top)) 18px 26px;
+      color: white;
+      background: linear-gradient(160deg, #0686df 0%, #0066b5 52%, #004b8a 100%);
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 88% 18%, rgba(255,255,255,.15), transparent 18%),
+        radial-gradient(circle at 35% 28%, rgba(255,255,255,.10), transparent 14%);
+      pointer-events: none;
+    }
+
+    .topbar {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .brand-wrap {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .brand {
+      width: 52px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+      font-size: 18px;
+      line-height: .82;
+      letter-spacing: -1px;
+    }
+
+    .brand small {
+      display: block;
+      font-size: 15px;
+      letter-spacing: -1.3px;
+    }
+
+    .greeting {
+      font-size: 12px;
+      opacity: .95;
+      line-height: 1.25;
+    }
+
+    .greeting strong {
+      display: block;
+      font-size: 15px;
+      margin-top: 1px;
+      letter-spacing: .1px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-btn {
+      width: 34px;
+      height: 34px;
+      border: 0;
+      border-radius: 999px;
+      color: white;
+      background: rgba(255, 255, 255, 0.11);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    .help-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 11px;
+      background: rgba(0, 57, 105, .38);
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      line-height: .92;
+    }
+
+    .account-card {
+      position: relative;
+      z-index: 1;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(0, 82, 149, .96), rgba(0, 66, 122, .97));
+      box-shadow: 0 14px 22px rgba(0, 27, 63, .22);
+      overflow: hidden;
+    }
+
+    .account-body {
+      padding: 20px 18px 16px;
+    }
+
+    .label {
+      color: rgba(255, 255, 255, .76);
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .balance-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .balance {
+      font-size: clamp(24px, 7vw, 31px);
+      font-weight: 900;
+      letter-spacing: -.7px;
+      white-space: nowrap;
+    }
+
+    .divider {
+      height: 1px;
+      background: rgba(255, 255, 255, .24);
+    }
+
+    .all-accounts {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 18px;
+      font-weight: 800;
+      font-size: 15px;
+      color: white;
+    }
+
+    .quick-menu {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      padding: 19px 13px 22px;
+      background: #00467e;
+    }
+
+    .quick-item {
+      display: grid;
+      place-items: center;
+      gap: 9px;
+      color: white;
+      font-size: 12px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .quick-icon {
+      width: 53px;
+      height: 53px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(150deg, #0d8eea, #0061a8);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 8px 15px rgba(0, 27, 63, .18);
+    }
+
+    .tap-card {
+      margin: 18px 18px 22px;
+      padding: 14px 14px;
+      border-radius: 11px;
+      color: white;
+      background: linear-gradient(110deg, #064a7f, #00558d);
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tap-card::after {
+      content: "";
+      position: absolute;
+      right: 88px;
+      top: -40px;
+      width: 1px;
+      height: 150px;
+      background: rgba(255,255,255,.16);
+      transform: rotate(-17deg);
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .badge-off {
+      padding: 6px 10px;
+      background: rgba(255, 255, 255, .85);
+      color: #737b83;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.05);
+    }
+
+    .tap-title {
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: -.2px;
+    }
+
+    .activate {
+      position: relative;
+      z-index: 1;
+      border: 0;
+      padding: 9px 13px;
+      color: white;
+      font-weight: 900;
+      background: var(--orange);
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 5px 12px rgba(222, 95, 0, .28);
+    }
+
+    .content {
+      padding: 0 18px;
+    }
+
+    .search {
+      height: 50px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 0 18px;
+      color: #09649d;
+      background: white;
+      border: 1px solid #e6ebf0;
+      box-shadow: 0 2px 3px rgba(0,0,0,.02);
+      font-weight: 700;
+      margin-bottom: 26px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      align-items: start;
+      padding: 3px 4px 8px;
+    }
+
+    .feature {
+      position: relative;
+      display: grid;
+      place-items: center;
+      gap: 8px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.28;
+      min-height: 94px;
+    }
+
+    .feature-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: #dff1ff;
+      color: #0785d7;
+    }
+
+    .feature-icon.green { background: #dcf7ed; color: #10b870; }
+    .feature-icon.cyan { background: #e0f8ff; color: #14a7cf; }
+    .feature-icon.pink { background: #f8e7ff; color: #da4bb6; }
+
+    .notif-dot {
+      position: absolute;
+      top: -4px;
+      right: 15px;
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: #f03948;
+      border: 2px solid var(--bg);
+    }
+
+    .more {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      color: #1082ce;
+      font-size: 13px;
+      font-weight: 900;
+      padding: 14px 0 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .finance {
+      margin: 20px -18px 0;
+      padding: 20px 18px 26px;
+      background: white;
+      border-top: 7px solid #eef3fb;
+    }
+
+    .finance-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+
+    .finance-title {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: -.3px;
+    }
+
+    .finance-title span { color: #ff7b1a; }
+
+    .show-link {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: #0784d6;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .period {
+      color: #1f2c38;
+      font-size: 15px;
+      font-weight: 750;
+      margin-bottom: 8px;
+    }
+
+    .chart-card {
+      height: 106px;
+      border-radius: 18px;
+      background: linear-gradient(100deg, #effaff, #fff5f4);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #edf4f7;
+    }
+
+    .chart-card svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .qr-float {
+      position: fixed;
+      left: 50%;
+      bottom: calc(24px + env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+      width: 68px;
+      height: 68px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: linear-gradient(180deg, #1b93e6, #0567b1);
+      border: 6px solid #e7f1fb;
+      box-shadow: 0 10px 24px rgba(0, 52, 100, .25);
+      z-index: 8;
+    }
+
+    .qr-mark {
+      width: 39px;
+      height: 39px;
+      border: 2px solid rgba(255,255,255,.8);
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-size: 10px;
+      font-weight: 900;
+      line-height: .9;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: calc(70px + env(safe-area-inset-bottom));
+      padding: 8px 12px calc(6px + env(safe-area-inset-bottom));
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      background: rgba(255, 255, 255, .97);
+      border-top: 1px solid #e8edf3;
+      box-shadow: 0 -10px 24px rgba(32, 60, 80, .08);
+      z-index: 7;
+    }
+
+    .nav-item {
+      border: 0;
+      background: transparent;
+      color: #8a96a3;
+      display: grid;
+      place-items: center;
+      gap: 3px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .nav-item.active {
+      color: #087bd0;
+      font-weight: 900;
+    }
+
+    .nav-spacer { pointer-events: none; }
+    svg { display: block; }
+
+    @media (max-width: 360px) {
+      .hero { padding-inline: 14px; }
+      .balance { font-size: 23px; }
+      .quick-icon, .feature-icon { width: 47px; height: 47px; }
+      .quick-item, .feature { font-size: 11px; }
+      .help-pill { display: none; }
+      .tap-title { font-size: 17px; }
+    }
+
+    @media (min-width: 768px) {
+      body {
+        background: #ddeaf7;
+        display: flex;
+        justify-content: center;
+        padding: 20px 0;
+      }
+      .phone {
+        max-width: 430px;
+        min-height: calc(100vh - 40px);
+        border-radius: 32px;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.04), 0 20px 80px rgba(0, 0, 0, 0.18);
+      }
+      .bottom-nav {
+        left: 50%;
+        right: auto;
+        bottom: 20px;
+        transform: translateX(-50%);
+        max-width: 430px;
+        border-radius: 0 0 32px 32px;
+      }
+      .qr-float { bottom: 44px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="phone" aria-label="Mobile banking interface">
+    <section class="hero">
+      <div class="topbar">
+        <div class="brand-wrap">
+          <div class="brand" aria-label="App logo">MOBI<small>mo</small></div>
+          <div class="greeting">Hai,<strong>M Andhika</strong></div>
+        </div>
+
+        <div class="top-actions">
+          <button class="icon-btn" aria-label="Notifikasi">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 7h18s-3 0-3-7"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </button>
+          <div class="help-pill">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1v-7h3zM3 19a2 2 0 0 0 2 2h1v-7H3z"/></svg>
+            <span>Pusat<br/>Bantuan</span>
+          </div>
+        </div>
+      </div>
+
+      <article class="account-card">
+        <div class="account-body">
+          <p class="label">Saldo Rekening Utama</p>
+          <div class="balance-row">
+            <h1 class="balance">Rp1.078.002,00</h1>
+            <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l20 20"/><path d="M6.7 6.7C4.5 8 3 10 2 12c2.2 4.5 5.6 6.7 10 6.7 1.5 0 2.8-.2 4-.8"/><path d="M10.5 5.4c.5-.1 1-.1 1.5-.1 4.4 0 7.8 2.2 10 6.7-.5 1.1-1.2 2.1-2 3"/><path d="M14.1 14.1a3 3 0 0 1-4.2-4.2"/></svg>
+          </div>
+          <div class="divider"></div>
+        </div>
+        <div class="all-accounts">
+          <span>Semua Rekeningmu</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+        <div class="quick-menu">
+          <div class="quick-item">
+            <div class="quick-icon">
+              <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3l4 4-4 4"/><path d="M21 7H3"/><path d="M7 21l-4-4 4-4"/><path d="M3 17h18"/></svg>
+            </div>
+            <span>Transfer</span>
+          </div>
+          <div class="quick-item">
+            <div class="quick-icon">
+              <svg width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="16" height="12" rx="2"/><path d="M7 9h5M7 13h2"/><path d="M19 10h2v10H8v-3"/><path d="M16 20v-5"/><path d="M13.5 17.5h5"/></svg>
+            </div>
+            <span>BRIVA</span>
+          </div>
+          <div class="quick-item">
+            <div class="quick-icon">
+              <svg width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h15a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M17 11h5v4h-5a2 2 0 0 1 0-4z"/><path d="M7 7V5a2 2 0 0 1 2-2h8"/></svg>
+            </div>
+            <span>E-Wallet</span>
+          </div>
+          <div class="quick-item">
+            <div class="quick-icon">
+              <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>
+            </div>
+            <span>Pulsa/Data</span>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="tap-card">
+      <div class="status">
+        <span class="badge-off">● Nonaktif</span>
+        <strong class="tap-title">Tap to Pay</strong>
+      </div>
+      <button class="activate">Aktifkan ›</button>
+    </section>
+
+    <section class="content">
+      <div class="search" role="search">
+        <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <span>Cari Fitur</span>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature">
+          <span class="notif-dot"></span>
+          <div class="feature-icon green">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="15" height="11" rx="2"/><path d="M7 13h.01"/><path d="M19 10h1.5a1.5 1.5 0 0 1 0 3H19"/><path d="M5 18v2"/><path d="M8 18v2"/></svg>
+          </div>
+          <span>Top Up</span>
+        </div>
+        <div class="feature">
+          <div class="feature-icon cyan">
+            <svg width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2h10a2 2 0 0 1 2 2v18l-3-2-2 2-2-2-2 2-2-2-3 2V4a2 2 0 0 1 2-2z"/><path d="M9 8h6"/><path d="M9 12h6"/><path d="M9 16h4"/></svg>
+          </div>
+          <span>Tagihan</span>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">
+            <svg width="31" height="31" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8"/><path d="M8 11h8"/><path d="M9 16h.01M12 16h.01M15 16h.01"/></svg>
+          </div>
+          <span>Setor &<br/>Tarik Tunai</span>
+        </div>
+        <div class="feature">
+          <div class="feature-icon pink">
+            <svg width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l1 13H5L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+          </div>
+          <span>Lifestyle</span>
+        </div>
+      </div>
+
+      <div class="more">Lainnya
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+
+      <section class="finance">
+        <div class="finance-head">
+          <h2 class="finance-title">Catatan Keuangan<span>mo</span></h2>
+          <div class="show-link">Tampilkan
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 5c5.05 0 8.78 4.06 10 7-1.22 2.94-4.95 7-10 7S3.22 14.94 2 12c1.22-2.94 4.95-7 10-7zm0 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg>
+          </div>
+        </div>
+        <p class="period">1 Mar 2025 - 31 Mar 2025</p>
+        <div class="chart-card" aria-hidden="true">
+          <svg viewBox="0 0 390 110" preserveAspectRatio="none">
+            <path d="M0 80 C55 25, 98 42, 150 71 S242 94, 305 42 S363 23, 390 52" fill="none" stroke="rgba(0,125,205,.28)" stroke-width="7"/>
+            <path d="M0 92 C60 48, 103 69, 155 80 S251 102, 306 57 S365 41, 390 69 L390 110 L0 110Z" fill="rgba(13, 150, 220, .08)"/>
+            <circle cx="316" cy="45" r="17" fill="rgba(255,105,105,.15)"/>
+            <path d="M308 52 L326 34 M326 34 H313 M326 34 V47" stroke="#ff6969" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </section>
+    </section>
+
+    <div class="qr-float" aria-label="QRIS button">
+      <div class="qr-mark">QRIS</div>
+    </div>
+
+    <nav class="bottom-nav" aria-label="Navigasi bawah">
+      <button class="nav-item active">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l9 8h-3v9h-5v-6h-2v6H6v-9H3l9-8z"/></svg>
+        <span>Home</span>
+      </button>
+      <button class="nav-item">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/></svg>
+        <span>Mutasi</span>
+      </button>
+      <div class="nav-spacer"></div>
+      <button class="nav-item">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7"/><path d="M2 7h20v5H2z"/><path d="M12 21V7"/><path d="M12 7H7.5a2.5 2.5 0 1 1 2.2-3.7L12 7z"/><path d="M12 7h4.5a2.5 2.5 0 1 0-2.2-3.7L12 7z"/></svg>
+        <span>Aktivitas</span>
+      </button>
+      <button class="nav-item">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Akun</span>
+      </button>
+    </nav>
+  </main>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+      });
+    }
+
+    document.querySelectorAll('button').forEach((button) => {
+      button.addEventListener('click', () => {
+        button.animate([
+          { transform: 'scale(1)' },
+          { transform: 'scale(.96)' },
+          { transform: 'scale(1)' }
+        ], { duration: 160, easing: 'ease-out' });
+      });
+    });
+  </script>
+</body>
+</html>
